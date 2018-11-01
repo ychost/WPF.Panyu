@@ -10,11 +10,9 @@ using System.Text;
 using System.Threading;
 using System.Windows;
 
-namespace WpfHuaWei.DataService
-{
+namespace WpfHuaWei.DataService {
     [Serializable]
-    public class MachineProductionInfo : INotifyPropertyChanged
-    {
+    public class MachineProductionInfo : INotifyPropertyChanged {
         /// <summary>
         /// dataDetailList的写锁
         /// </summary>
@@ -33,13 +31,11 @@ namespace WpfHuaWei.DataService
         /// </summary>
         public ProductionProcessPdfService PdfService { get; set; }
 
-        public MachineProductionInfo()
-        {
+        public MachineProductionInfo() {
             InitializeProductionInfo();
         }
 
-        public void InitializeProductionInfo()
-        {
+        public void InitializeProductionInfo() {
             dataDetailLock = new object();
             dataDetailList = new List<DataDetail>();
 
@@ -52,11 +48,9 @@ namespace WpfHuaWei.DataService
         /// 机台名称
         /// </summary>
         private string machineName;
-        public string MachineName
-        {
+        public string MachineName {
             get { return machineName; }
-            set
-            {
+            set {
                 machineName = value;
                 OnPropertyChanged("MachineName");
             }
@@ -66,22 +60,18 @@ namespace WpfHuaWei.DataService
         /// 操作卡号
         /// </summary>
         private string employeeRfid;
-        public string EmployeeRfid
-        {
-            set
-            {
+        public string EmployeeRfid {
+            set {
                 if (string.IsNullOrEmpty(value) ||
                     value.Equals(employeeRfid)) return;
 
                 employeeRfid = value;
                 if (Configuration.EmployeeMap.ContainsKey(value))
                     EmployeeName = Configuration.EmployeeMap[value].EmployeeName;
-                else
-                {
+                else {
                     string whereString = "where employeeCode='" + value + "'";
                     Employee employee = EmployeeDAL.GetEmployee(whereString);
-                    if (employee != null)
-                    {
+                    if (employee != null) {
                         EmployeeName = employee.EmployeeName;
                         Configuration.EmployeeMap.Add(employee.EmployeeCode, employee);
                     }
@@ -93,11 +83,9 @@ namespace WpfHuaWei.DataService
         /// 操作员姓名
         /// </summary>
         private string employeeName;
-        public string EmployeeName
-        {
+        public string EmployeeName {
             get { return employeeName; }
-            set
-            {
+            set {
                 employeeName = value;
                 OnPropertyChanged("EmployeeName");
             }
@@ -107,14 +95,11 @@ namespace WpfHuaWei.DataService
         /// 半成品卡号
         /// </summary>
         private string axisNo;
-        public string AxisNo
-        {
+        public string AxisNo {
             get { return axisNo; }
-            set
-            {
+            set {
                 if (!string.IsNullOrEmpty(value)
-                    && !value.Equals(axisNo))
-                {
+                    && !value.Equals(axisNo)) {
                     axisNo = value;
                     OnPropertyChanged("AxisNo");
                 }
@@ -125,13 +110,10 @@ namespace WpfHuaWei.DataService
         /// 米数
         /// </summary>
         private double meter;
-        public double Meter
-        {
+        public double Meter {
             get { return meter; }
-            set
-            {
-                if (value != meter)
-                {
+            set {
+                if (value != meter) {
                     meter = value;
                     OnPropertyChanged("Meter");
                 }
@@ -142,25 +124,20 @@ namespace WpfHuaWei.DataService
         /// 外径值
         /// </summary>
         private double outerDiameter;
-        public double OuterDiameter
-        {
-            set
-            {
-                if (outerDiameter != value)
-                {
+        public double OuterDiameter {
+            set {
+                if (outerDiameter != value) {
                     if (value > maxOD)
                         MaxOD = value;
                     if (value < minOD || minOD <= 0)
                         MinOD = value;
 
-                    if (value <= 0)
-                    {
+                    if (value <= 0) {
                         Thickness = 0;
                         MinThickness = 0;
                     }
                     // 如果有铜线外径
-                    else if (innerDiameter > 0)
-                    {
+                    else if (innerDiameter > 0) {
                         Thickness = (value - innerDiameter) / 2.0;
                         if (thickness < minThickness || minThickness <= 0)
                             MinThickness = thickness;
@@ -175,14 +152,10 @@ namespace WpfHuaWei.DataService
         /// 导体直径
         /// </summary>
         private double innerDiameter;
-        public double InnerDiameter
-        {
-            set
-            {
-                if (innerDiameter != value)
-                {
-                    if (value <= 0)
-                    {
+        public double InnerDiameter {
+            set {
+                if (innerDiameter != value) {
+                    if (value <= 0) {
                         Thickness = 0;
                         MinThickness = 0;
                     }
@@ -195,11 +168,9 @@ namespace WpfHuaWei.DataService
         /// 最大OD值
         /// </summary>
         private double maxOD;
-        public double MaxOD
-        {
+        public double MaxOD {
             get { return maxOD; }
-            set
-            {
+            set {
                 maxOD = value;
                 OnPropertyChanged("MaxOD");
             }
@@ -209,11 +180,9 @@ namespace WpfHuaWei.DataService
         /// 最小OD值
         /// </summary>
         private double minOD;
-        public double MinOD
-        {
+        public double MinOD {
             get { return minOD; }
-            set
-            {
+            set {
                 minOD = value;
                 OnPropertyChanged("MinOD");
             }
@@ -223,20 +192,14 @@ namespace WpfHuaWei.DataService
         /// 绝缘/护套厚度
         /// </summary>
         private double thickness = int.MinValue;
-        public double Thickness
-        {
+        public double Thickness {
             get { return thickness; }
-            set
-            {
-                if (thickness != value)
-                {
-                    if (value > 0)
-                    {
+            set {
+                if (thickness != value) {
+                    if (value > 0) {
                         thickness = value;
                         OnPropertyChanged("Thickness");
-                    }
-                    else if (thickness > 0)
-                    {
+                    } else if (thickness > 0) {
                         thickness = 0;
                         OnPropertyChanged("Thickness");
                     }
@@ -248,20 +211,14 @@ namespace WpfHuaWei.DataService
         /// 最小绝缘/护套厚度
         /// </summary>
         private double minThickness = int.MinValue;
-        public double MinThickness
-        {
+        public double MinThickness {
             get { return minThickness; }
-            set
-            {
-                if (minThickness != value)
-                {
-                    if (value > 0)
-                    {
+            set {
+                if (minThickness != value) {
+                    if (value > 0) {
                         minThickness = value;
                         OnPropertyChanged("MinThickness");
-                    }
-                    else if (minThickness > 0)
-                    {
+                    } else if (minThickness > 0) {
                         minThickness = 0;
                         OnPropertyChanged("MinThickness");
                     }
@@ -273,17 +230,13 @@ namespace WpfHuaWei.DataService
         /// 物料射频卡号
         /// </summary>
         private string materialRfid;
-        public string MaterialRfid
-        {
-            set
-            {
+        public string MaterialRfid {
+            set {
                 if (!string.IsNullOrEmpty(value)
-                    && !value.Equals(materialRfid))
-                {
+                    && !value.Equals(materialRfid)) {
                     string where = "where MaterialRFID = '" + value + "'";
                     Material material = MaterialDAL.GetMaterial(where);
-                    if (material != null)
-                    {
+                    if (material != null) {
                         materialRfid = value;
                         MaterialName = material.MaterialName;
                         MaterialColor = material.MaterialColor;
@@ -296,11 +249,9 @@ namespace WpfHuaWei.DataService
         /// 材料名称
         /// </summary>
         private string materialName;
-        public string MaterialName
-        {
+        public string MaterialName {
             get { return materialName; }
-            set
-            {
+            set {
                 materialName = value;
                 OnPropertyChanged("MaterialName");
             }
@@ -310,11 +261,9 @@ namespace WpfHuaWei.DataService
         /// 材料颜色
         /// </summary>
         private string materialColor;
-        public string MaterialColor
-        {
+        public string MaterialColor {
             get { return materialColor; }
-            set
-            {
+            set {
                 materialColor = value;
                 OnPropertyChanged("MaterialColor");
             }
@@ -324,13 +273,10 @@ namespace WpfHuaWei.DataService
         /// 报警次数
         /// </summary>
         private int sparkValue;
-        public int SparkValue
-        {
+        public int SparkValue {
             get { return sparkValue; }
-            set
-            {
-                if (sparkValue != value)
-                {
+            set {
+                if (sparkValue != value) {
                     sparkValue = value;
                     OnPropertyChanged("SparkValue");
                 }
@@ -341,13 +287,10 @@ namespace WpfHuaWei.DataService
         /// 主机速度
         /// </summary>
         private double motorVelocity = int.MinValue;
-        public double MotorVelocity
-        {
+        public double MotorVelocity {
             get { return motorVelocity; }
-            set
-            {
-                if (motorVelocity != value)
-                {
+            set {
+                if (motorVelocity != value) {
                     motorVelocity = value;
                     OnPropertyChanged("MotorVelocity");
                 }
@@ -358,13 +301,10 @@ namespace WpfHuaWei.DataService
         /// 线速度
         /// </summary>
         private double lineVelocity = int.MinValue;
-        public double LineVelocity
-        {
+        public double LineVelocity {
             get { return lineVelocity; }
-            set
-            {
-                if (value != lineVelocity)
-                {
+            set {
+                if (value != lineVelocity) {
                     lineVelocity = value;
                     OnPropertyChanged("LineVelocity");
                 }
@@ -375,13 +315,10 @@ namespace WpfHuaWei.DataService
         /// 放线张力
         /// </summary>
         private double firststress = int.MinValue;
-        public double Firststress
-        {
+        public double Firststress {
             get { return firststress; }
-            set
-            {
-                if (firststress != value)
-                {
+            set {
+                if (firststress != value) {
                     firststress = value;
                     OnPropertyChanged("Firststress");
                 }
@@ -392,13 +329,10 @@ namespace WpfHuaWei.DataService
         /// 一段温度
         /// </summary>
         private double temperature1 = int.MinValue;
-        public double Temperature1
-        {
+        public double Temperature1 {
             get { return temperature1; }
-            set
-            {
-                if (temperature1 != value)
-                {
+            set {
+                if (temperature1 != value) {
                     temperature1 = value;
                     OnPropertyChanged("Temperature1");
                 }
@@ -409,13 +343,10 @@ namespace WpfHuaWei.DataService
         /// 二段温度
         /// </summary>
         private double temperature2 = int.MinValue;
-        public double Temperature2
-        {
+        public double Temperature2 {
             get { return temperature2; }
-            set
-            {
-                if (temperature2 != value)
-                {
+            set {
+                if (temperature2 != value) {
                     temperature2 = value;
                     OnPropertyChanged("Temperature2");
                 }
@@ -426,13 +357,10 @@ namespace WpfHuaWei.DataService
         /// 三段温度
         /// </summary>
         private double temperature3 = int.MinValue;
-        public double Temperature3
-        {
+        public double Temperature3 {
             get { return temperature3; }
-            set
-            {
-                if (temperature3 != value)
-                {
+            set {
+                if (temperature3 != value) {
                     temperature3 = value;
                     OnPropertyChanged("Temperature3");
                 }
@@ -443,13 +371,10 @@ namespace WpfHuaWei.DataService
         /// 四段温度
         /// </summary>
         private double temperature4 = int.MinValue;
-        public double Temperature4
-        {
+        public double Temperature4 {
             get { return temperature4; }
-            set
-            {
-                if (temperature4 != value)
-                {
+            set {
+                if (temperature4 != value) {
                     temperature4 = value;
                     OnPropertyChanged("Temperature4");
                 }
@@ -460,13 +385,10 @@ namespace WpfHuaWei.DataService
         /// 五段温度
         /// </summary>
         private double temperature5 = int.MinValue;
-        public double Temperature5
-        {
+        public double Temperature5 {
             get { return temperature5; }
-            set
-            {
-                if (temperature5 != value)
-                {
+            set {
+                if (temperature5 != value) {
                     temperature5 = value;
                     OnPropertyChanged("Temperature5");
                 }
@@ -477,13 +399,10 @@ namespace WpfHuaWei.DataService
         /// 六段温度
         /// </summary>
         private double temperature6 = int.MinValue;
-        public double Temperature6
-        {
+        public double Temperature6 {
             get { return temperature6; }
-            set
-            {
-                if (temperature6 != value)
-                {
+            set {
+                if (temperature6 != value) {
                     temperature6 = value;
                     OnPropertyChanged("Temperature6");
                 }
@@ -494,13 +413,10 @@ namespace WpfHuaWei.DataService
         /// 颈部温度
         /// </summary>
         private double temperature7 = int.MinValue;
-        public double Temperature7
-        {
+        public double Temperature7 {
             get { return temperature7; }
-            set
-            {
-                if (temperature7 != value)
-                {
+            set {
+                if (temperature7 != value) {
                     temperature7 = value;
                     OnPropertyChanged("Temperature7");
                 }
@@ -511,13 +427,10 @@ namespace WpfHuaWei.DataService
         /// 机头温度
         /// </summary>
         private double temperature8 = int.MinValue;
-        public double Temperature8
-        {
+        public double Temperature8 {
             get { return temperature8; }
-            set
-            {
-                if (temperature8 != value)
-                {
+            set {
+                if (temperature8 != value) {
                     temperature8 = value;
                     OnPropertyChanged("Temperature8");
                 }
@@ -528,13 +441,10 @@ namespace WpfHuaWei.DataService
         /// 眼膜温度
         /// </summary>
         private double temperature9 = int.MinValue;
-        public double Temperature9
-        {
+        public double Temperature9 {
             get { return temperature9; }
-            set
-            {
-                if (temperature9 != value)
-                {
+            set {
+                if (temperature9 != value) {
                     temperature9 = value;
                     OnPropertyChanged("Temperature9");
                 }
@@ -542,16 +452,29 @@ namespace WpfHuaWei.DataService
         }
 
         /// <summary>
+        /// 火花机电压
+        /// </summary>
+        private double sparkVoltage;
+
+        public double SparkVoltage {
+            get { return sparkVoltage; }
+            set {
+                if (sparkVoltage != null) {
+                    sparkVoltage = value;
+                    OnPropertyChanged(nameof(SparkVoltage));
+                }
+            }
+        }
+
+
+        /// <summary>
         /// 水槽温度
         /// </summary>
         private double temperature10 = int.MinValue;
-        public double Temperature10
-        {
+        public double Temperature10 {
             get { return temperature10; }
-            set
-            {
-                if (temperature10 != value)
-                {
+            set {
+                if (temperature10 != value) {
                     temperature10 = value;
                     OnPropertyChanged("Temperature10");
                 }
@@ -562,13 +485,10 @@ namespace WpfHuaWei.DataService
         /// 现场温度
         /// </summary>
         private double temperature = int.MinValue;
-        public double Temperature
-        {
+        public double Temperature {
             get { return temperature; }
-            set
-            {
-                if (temperature != value)
-                {
+            set {
+                if (temperature != value) {
                     temperature = value;
                     OnPropertyChanged("Temperature");
                 }
@@ -579,13 +499,10 @@ namespace WpfHuaWei.DataService
         /// 现场湿度
         /// </summary>
         private double humidity = int.MinValue;
-        public double Humidity
-        {
+        public double Humidity {
             get { return humidity; }
-            set
-            {
-                if (humidity != value)
-                {
+            set {
+                if (humidity != value) {
                     humidity = value;
                     OnPropertyChanged("Humidity");
                 }
@@ -636,7 +553,7 @@ namespace WpfHuaWei.DataService
         // 42    铜线OD
         // 43    喷码时间
         // 60    落轴
-
+        // 800 火花机电压
         /// <summary>
         /// 定义double属性变化的委托处理对象
         /// </summary>
@@ -647,10 +564,8 @@ namespace WpfHuaWei.DataService
 
         public event DoublePropertyChangedHandler DoublePropertyChanged;
 
-        private void OnDoublePropertyChanged(int parameterId, DateTime dateTime, double value)
-        {
-            if (DoublePropertyChanged != null)
-            {
+        private void OnDoublePropertyChanged(int parameterId, DateTime dateTime, double value) {
+            if (DoublePropertyChanged != null) {
                 DoublePropertyChanged.Invoke(parameterId, dateTime, value);
             }
         }
@@ -659,10 +574,8 @@ namespace WpfHuaWei.DataService
         /// 添加DataDetail
         /// </summary>
         /// <param name="dataDetail"></param>
-        public void AddDataDetail(DataDetail dataDetail)
-        {
-            lock (dataDetailLock)
-            {
+        public void AddDataDetail(DataDetail dataDetail) {
+            lock (dataDetailLock) {
                 dataDetailList.Add(dataDetail);
             }
         }
@@ -671,12 +584,9 @@ namespace WpfHuaWei.DataService
         /// 添加DataDetail集合
         /// </summary>
         /// <param name="dataDetails"></param>
-        public void AddDataDetailList(IEnumerable<DataDetail> dataDetails)
-        {
-            lock (dataDetailLock)
-            {
-                foreach (var dd in dataDetails)
-                {
+        public void AddDataDetailList(IEnumerable<DataDetail> dataDetails) {
+            lock (dataDetailLock) {
+                foreach (var dd in dataDetails) {
                     dataDetailList.Add(dd);
                 }
             }
@@ -686,20 +596,15 @@ namespace WpfHuaWei.DataService
         /// 读取并更新生产数据
         /// </summary>
         /// <param name="state"></param>
-        private void ReadAndUpdateProductionInfo(object state)
-        {
-            while (true)
-            {
-                if (dataDetailList.Count > 0)
-                {
+        private void ReadAndUpdateProductionInfo(object state) {
+            while (true) {
+                if (dataDetailList.Count > 0) {
                     DataDetail dataDetail = null;
-                    lock (dataDetailLock)
-                    {
+                    lock (dataDetailLock) {
                         dataDetail = dataDetailList[0];
                         dataDetailList.RemoveAt(0);
                     }
-                    if (dataDetail != null)
-                    {
+                    if (dataDetail != null) {
                         AddSampleValue(dataDetail);
                     }
                 }
@@ -712,17 +617,14 @@ namespace WpfHuaWei.DataService
         /// <summary>
         /// 添加采集数据
         /// </summary>
-        private void AddSampleValue(DataDetail dataDetail)
-        {
-            switch (dataDetail.ParameterCodeID)
-            {
+        private void AddSampleValue(DataDetail dataDetail) {
+            switch (dataDetail.ParameterCodeID) {
                 case 2: // od值
-                    if ((DateTime.Now - lastOuterDiameterRecvTime).TotalMilliseconds > 300)
-                    {
+                    if ((DateTime.Now - lastOuterDiameterRecvTime).TotalMilliseconds > 300) {
                         OuterDiameter = dataDetail.CollectedValue;
                         OnDoublePropertyChanged(2, ParseDateTime(dataDetail.CollectedTime),
                             dataDetail.CollectedValue);
-                    
+
                         lastOuterDiameterRecvTime = DateTime.Now;
                     }
                     break;
@@ -770,15 +672,13 @@ namespace WpfHuaWei.DataService
                     break;
                 case 35: // 主机电机转速
                     if (dataDetail.CollectedValue >= 0 &&
-                        dataDetail.CollectedValue < GlobalConstants.GlobalUpper)
-                    {
+                        dataDetail.CollectedValue < GlobalConstants.GlobalUpper) {
                         MotorVelocity = dataDetail.CollectedValue;
                     }
                     break;
                 case 38: // 线速度
                     if (dataDetail.CollectedValue >= 0 &&
-                        dataDetail.CollectedValue < GlobalConstants.GlobalUpper)
-                    {
+                        dataDetail.CollectedValue < GlobalConstants.GlobalUpper) {
                         LineVelocity = dataDetail.CollectedValue;
                     }
                     break;
@@ -790,6 +690,9 @@ namespace WpfHuaWei.DataService
                     OnDoublePropertyChanged(42, ParseDateTime(dataDetail.CollectedTime),
                         dataDetail.CollectedValue);
                     break;
+                case 800:
+                    SparkVoltage = dataDetail.CollectedValue;
+                    break;
             }
         }
 
@@ -798,8 +701,7 @@ namespace WpfHuaWei.DataService
         /// </summary>
         /// <param name="dateTimeString"></param>
         /// <returns></returns>
-        private DateTime ParseDateTime(string dateTimeString)
-        {
+        private DateTime ParseDateTime(string dateTimeString) {
             DateTime dateTime = DateTime.Now;
             DateTime.TryParse(dateTimeString, out dateTime);
             return dateTime;
@@ -809,10 +711,8 @@ namespace WpfHuaWei.DataService
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void OnPropertyChanged(string propertyName)
-        {
-            if (this.PropertyChanged != null)
-            {
+        private void OnPropertyChanged(string propertyName) {
+            if (this.PropertyChanged != null) {
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
         }

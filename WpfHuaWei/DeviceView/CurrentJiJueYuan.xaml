@@ -251,6 +251,11 @@
                     <TextBlock Grid.Row="8" Grid.Column="1" Margin="5,0,0,0" Foreground="#0000CB"
                                Text="{Binding Meter}" FontSize="36" FontWeight="Bold" 
                                HorizontalAlignment="Left" VerticalAlignment="Center"/>
+<!--                    <TextBlock Grid.Row="9" Grid.Column="0" Text="火花电压: " FontSize="25"-->
+<!--                               HorizontalAlignment="Right" VerticalAlignment="Center"/>-->
+<!--                    <TextBlock Grid.Row="9" Grid.Column="1" Margin="5,0,0,0" Foreground="#0000CB"-->
+<!--                               Text="{Binding SparkVoltage,Converter={StaticResource pdf}}" FontSize="36" FontWeight="Bold"-->
+<!--                               HorizontalAlignment="Left" VerticalAlignment="Center"/>-->
                 </Grid>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0"
@@ -498,7 +503,15 @@
                        VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBlock Grid.Row="6" Grid.Column="2" Foreground="Gold" 
                        Margin="20,0,0,0" FontSize="60" FontWeight="Bold" 
-                       Text="{Binding Firststress, Converter={StaticResource npr}}"
+                       Text="{Binding Firststress, Converter={StaticResource pdf}}"
+                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+            <TextBlock Grid.Row="6" Grid.Column="4" Text="火花电压:"
+                       FontSize="40" FontWeight="Bold" Foreground="GreenYellow"
+                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="6" Grid.Column="5" Foreground="Gold" 
+                       Margin="20,0,0,0" FontSize="60" FontWeight="Bold" 
+                       Text="{Binding SparkVoltage, Converter={StaticResource pdf}}"
                        VerticalAlignment="Center" HorizontalAlignment="Left"/>
         </Grid>
     </Grid>

@@ -16,7 +16,7 @@ namespace WpfHuaWei.DeviceView
             System.Globalization.CultureInfo culture)
         {
             if ((double)value > 0)
-                return value;
+                return ((double)value).ToString("#0");
             else
                 return GlobalConstants.NonpositiveReplacer;
         }

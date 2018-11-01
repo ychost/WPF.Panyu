@@ -99,8 +99,9 @@
     <Reference Include="Xceed.Wpf.Toolkit">
       <HintPath>..\libs\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
-    <Reference Include="YCsharp">
-      <HintPath>..\..\..\IntelliManuPro\YCsharp\bin\Debug\YCsharp.exe</HintPath>
+    <Reference Include="YCsharp, Version=1.1.5560.6878, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\IntelliManuPro\YCsharp\bin\Debug\YCsharp.exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -553,11 +553,7 @@ namespace WpfHuaWei.DataService {
         /// </summary>
         public static void StartUseMq() {
             activeMq.Start();
-            var num = new Random().Next(10000);
             activeMq.ListenTopic("mes_online", "98k", null, Show);
-            activeMq.ListenP2PMessage("sr_test", str => {
-                Console.WriteLine(str);
-            });
         }
 
         /// <summary>

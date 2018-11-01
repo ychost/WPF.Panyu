@@ -25,7 +25,7 @@ namespace HuaWeiBase
         /// <summary>
         /// double数据格式化字符串
         /// </summary>
-        public static string DoubleFormat = "#0.000";
+        public static string DoubleFormat = "#0.00";
 
         /// <summary>
         /// 非正数的替换符号
