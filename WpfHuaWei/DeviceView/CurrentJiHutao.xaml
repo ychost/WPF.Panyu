@@ -1,0 +1,514 @@
+﻿<device:BaseMachine x:Class="WpfHuaWei.DeviceView.CurrentJiHutao"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:device="clr-namespace:WpfHuaWei.DeviceView"
+             xmlns:utils="clr-namespace:WpfHuaWei.Utils"
+             xmlns:toolKit="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:hwCtrls="clr-namespace:HuaWeiCtls;assembly=HuaWeiCtls"
+             mc:Ignorable="d" d:DesignHeight="1000" d:DesignWidth="1400">
+    <device:BaseMachine.Resources>
+        <utils:DateTimeToStringConverter x:Key="dttsc"/>
+        <device:ColorNameToBrushConverter x:Key="cntbc"/>
+        <device:DoubleValueFormatter x:Key="dvf"/>
+        <device:PositiveDoubleFormatter x:Key="pdf"/>
+        <device:NonpositiveReplacer x:Key="npr"/>
+    </device:BaseMachine.Resources>
+    <Grid  x:Name="rootGrid" Background="White" TextElement.FontFamily="微软雅黑,黑体,幼圆">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+        <Border BorderBrush="Gray" BorderThickness="0,0,0,2"/>
+        <!-- 机台及人员 -->
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                    HorizontalAlignment="Left">
+            <TextBlock Text="机台:" FontSize="20" Margin="5,0" VerticalAlignment="Center"/>
+            <TextBlock FontSize="26" FontWeight="Bold" Foreground="DarkGreen"
+                       Text="{Binding MachineName}" VerticalAlignment="Center"/>
+            <TextBlock Text="操作员:" FontSize="20" Margin="20,0,5,0"
+                       VerticalAlignment="Center"/>
+            <TextBlock FontSize="26" Foreground="DarkGreen" FontWeight="Bold"
+                       Text="{Binding EmployeeName}" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- 当前时间 -->
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                    HorizontalAlignment="Right" Margin="0,0,10,0">
+            <TextBlock Text="当前时间:" FontSize="20" VerticalAlignment="Center"/>
+            <TextBlock x:Name="tbCurrentTime" FontSize="20" Foreground="DarkGreen"
+                       FontWeight="Bold" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom"
+                    HorizontalAlignment="Center">
+            <hwCtrls:WenlButton x:Name="btnMainView" Content="主界面" Padding="20,3"
+                                FontSize="24" Foreground="Black" FontWeight="Bold"
+                                Type="Label" Click="btnMainView_Click"/>
+            <hwCtrls:WenlButton x:Name="btnSubView" Content="其他参数" Padding="20,3"
+                                FontSize="20" Foreground="Black" Type="Label"
+                                Click="btnSubView_Click"/>
+        </StackPanel>
+
+        <!-- 用于接收条码的埋点 -->
+        <TextBox x:Name="tbQrcode" Width="3" Height="23"
+                 Style="{StaticResource hiddenTextBoxStyle}"
+                 TextChanged="tbQrcode_TextChanged"
+                 VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+        <Grid x:Name="mainContentGrid" Grid.Row="1" Panel.ZIndex="200" Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="1*" MaxWidth="1200"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="10"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid x:Name="leftMainContentGrid" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="200"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="工艺参数" Foreground="DarkGreen" 
+                           FontWeight="Bold" FontSize="26"
+                           VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+                <!-- PDF -->
+                <hwCtrls:PdfReader x:Name="pdfReader" Grid.Row="1" Visibility="Collapsed"/>
+
+                <!-- 工作单 -->
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.ColumnSpan="8" Text="生产计划表" FontSize="26"
+                               FontWeight="Bold" Foreground="DarkGreen" Margin="0,4"
+                               VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+
+                    <Border Grid.Row="1" Grid.Column="0" BorderThickness="1,1,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="工单号" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="1" Grid.Column="1" BorderThickness="0,1,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="工艺编号" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="1" Grid.Column="2" BorderThickness="0,1,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="型号规格" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="1" Grid.Column="3" BorderThickness="0,1,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="1" Grid.Column="3" Text="物料编号" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="1" Grid.Column="4" BorderThickness="0,1,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="1" Grid.Column="4" Text="线芯颜色" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="1" Grid.Column="5" BorderThickness="0,1,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="1" Grid.Column="5" Text="出货长度(m)" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="1" Grid.Column="6" BorderThickness="0,1,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="1" Grid.Column="6" Text="备注" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="1" Grid.Column="7" BorderThickness="0,1,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="1" Grid.Column="7" Text="排产长度(m)" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                    <Border Grid.Row="2" Grid.Column="0" BorderThickness="1,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock x:Name="tbWroksheetNo" Grid.Row="2" Grid.Column="0"
+                               FontSize="20" TextWrapping="Wrap" TextAlignment="Center"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="2" Grid.Column="1" BorderThickness="0,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock x:Name="tbCrafworkCode" Grid.Row="2" Grid.Column="1"
+                               FontSize="20" TextWrapping="Wrap" TextAlignment="Center"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="2" Grid.Column="2" BorderThickness="0,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock x:Name="tbSpecification" Grid.Row="2" Grid.Column="2"
+                               FontSize="20" TextWrapping="Wrap" TextAlignment="Center"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="2" Grid.Column="3" BorderThickness="0,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock x:Name="tbMaterialNo" Grid.Row="2" Grid.Column="3"
+                               FontSize="20" TextWrapping="Wrap" TextAlignment="Center"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="2" Grid.Column="4" BorderThickness="0,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock x:Name="tbColor" Grid.Row="2" Grid.Column="4" FontSize="20"
+                               TextWrapping="Wrap" TextAlignment="Center"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="2" Grid.Column="5" BorderThickness="0,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock x:Name="tbLength" Grid.Row="2" Grid.Column="5" FontSize="20"
+                               TextWrapping="Wrap" TextAlignment="Center"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="2" Grid.Column="6" BorderThickness="0,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock x:Name="tbBack" Grid.Row="2" Grid.Column="6" FontSize="20"
+                               TextWrapping="Wrap" TextAlignment="Center"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="2" Grid.Column="7" BorderThickness="0,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock x:Name="tbArrLength" Grid.Row="2" Grid.Column="7"
+                               FontSize="20" TextWrapping="Wrap" TextAlignment="Center"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Grid>
+            </Grid>
+
+            <Grid x:Name="rightMainContentGrid" Grid.Column="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="21"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="300"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="400"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- 外径截面显示控件 -->
+                <hwCtrls:JhtDiameterChart x:Name="diameterChart" Grid.Row="0" Grid.Column="0"
+                                          HorizontalAlignment="Stretch"
+                                          ReferencedDiameter="10.5" VerticalAlignment="Stretch"
+                                          OuterBackground="{Binding MaterialColor, Converter={StaticResource cntbc}}"/>
+
+                <!-- 外径参数 -->
+                <Grid Grid.Row="0" Grid.Column="1" Margin="30,10,10,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="130"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="最大外径: " FontSize="25"
+                               VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" Margin="5,0,0,0" Foreground="#794B52"
+                               Text="{Binding MaxOD, Converter={StaticResource pdf}}"
+                               FontSize="36" FontWeight="Bold" HorizontalAlignment="Left"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="最小外径: " FontSize="25"
+                               VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" Foreground="#794B52"
+                               Text="{Binding MinOD, Converter={StaticResource pdf}}"
+                               FontSize="36" FontWeight="Bold" HorizontalAlignment="Left"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="护套厚度: " FontSize="25"
+                               HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Margin="5,0,0,0" Foreground="#794B52" 
+                               Text="{Binding Thickness, Converter={StaticResource pdf}}"
+                               FontSize="36" FontWeight="Bold" HorizontalAlignment="Left"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="最小护套: " FontSize="25"
+                               HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1" Margin="5,0,0,0" Foreground="#794B52" 
+                               Text="{Binding MinThickness, Converter={StaticResource pdf}}"
+                               FontSize="36" FontWeight="Bold" HorizontalAlignment="Left"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="火花报警: " FontSize="25"
+                               HorizontalAlignment="Right" VerticalAlignment="Center"/>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="1"
+                                Margin="5,0,0,0">
+                        <TextBlock Foreground="#794B52" FontSize="36" FontWeight="Bold"
+                               Text="{Binding SparkValue}" VerticalAlignment="Center"/>
+                        <TextBlock Text="次" Foreground="#794B52" FontSize="32" FontWeight="Bold"
+                                   Margin="3,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <Rectangle Grid.Row="5" Grid.ColumnSpan="2" Height="1" SnapsToDevicePixels="True"
+                               Stroke="DarkGray" StrokeDashArray="5,10"/>
+
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="主机速度: " FontSize="25"
+                               HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="6" Grid.Column="1" Margin="5,0,0,0" Foreground="#0000CB" 
+                               Text="{Binding MotorVelocity, Converter={StaticResource npr}}"
+                               FontSize="36" FontWeight="Bold" HorizontalAlignment="Left"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="7" Grid.Column="0" Text="线 速  度: " FontSize="25"
+                               HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="7" Grid.Column="1" Margin="5,0,0,0" Foreground="#0000CB"
+                               Text="{Binding LineVelocity, Converter={StaticResource npr}}"
+                               FontSize="36" FontWeight="Bold" HorizontalAlignment="Left"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="8" Grid.Column="0" Text="米       数: " FontSize="25"
+                               HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="8" Grid.Column="1" Margin="5,0,0,0" Foreground="#0000CB"
+                               Text="{Binding Meter}" FontSize="36" FontWeight="Bold"
+                               HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0"
+                            HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <TextBlock Text="物料名称:" FontSize="25" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" 
+                               Foreground="#0000CB" Text="{Binding MaterialName}"
+                               FontSize="25" FontWeight="Bold" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="47,0,0,0"
+                            Grid.Row="1" Grid.Column="1"
+                            HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <TextBlock Text="物料颜色:" FontSize="25" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="11" Grid.Column="1" Margin="5,0,0,0"
+                               Foreground="#0000CB" Text="{Binding MaterialColor}"
+                               FontSize="36" FontWeight="Bold" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <Rectangle Grid.Row="2" Grid.ColumnSpan="2" Height="1" 
+                           SnapsToDevicePixels="True" Margin="0,6,0,0" 
+                           Stroke="DarkGray" VerticalAlignment="Center"/>
+
+                <!-- 押出机温度 -->
+                <Grid Grid.Row="3" Grid.ColumnSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="36"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="9" Margin="0,3"
+                               Text="押出机温度" FontSize="26" 
+                               FontWeight="Bold" Foreground="DarkGreen"
+                               VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+
+                    <Border Grid.Row="1" Grid.Column="0" BorderThickness="1,1,1,1" BorderBrush="Gray"/>
+                    <!-- 一段温度 -->
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="一段温度" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="1" Grid.Column="1" BorderThickness="0,1,1,1" BorderBrush="Gray"/>
+                    <!-- 二段温度 -->
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="二段温度" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="1" Grid.Column="2" BorderThickness="0,1,1,1" BorderBrush="Gray"/>
+                    <!-- 三段温度 -->
+                    <TextBlock Grid.Row="1" Grid.Column="2" Text="三段温度" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="1" Grid.Column="3" BorderThickness="0,1,1,1" BorderBrush="Gray"/>
+                    <!-- 四段温度 -->
+                    <TextBlock Grid.Row="1" Grid.Column="3" Text="四段温度" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="1" Grid.Column="4" BorderThickness="0,1,1,1" BorderBrush="Gray"/>
+                    <!-- 五段温度 -->
+                    <TextBlock Grid.Row="1" Grid.Column="4" Text="五段温度" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="1" Grid.Column="5" BorderThickness="0,1,1,1" BorderBrush="Gray"/>
+                    <!-- 颈部温度 -->
+                    <TextBlock Grid.Row="1" Grid.Column="5" Text="颈部温度" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="1" Grid.Column="6" BorderThickness="0,1,1,1" BorderBrush="Gray"/>
+                    <!-- 机头温度 -->
+                    <TextBlock Grid.Row="1" Grid.Column="6" Text="机头温度" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="1" Grid.Column="7" BorderThickness="0,1,1,1" BorderBrush="Gray"/>
+                    <!-- 眼模温度 -->
+                    <TextBlock Grid.Row="1" Grid.Column="7" Text="眼模温度" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="1" Grid.Column="8" BorderThickness="0,1,1,1" BorderBrush="Gray"/>
+                    <!-- 水槽温度 -->
+                    <TextBlock Grid.Row="1" Grid.Column="8" Text="水槽温度" FontSize="20"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                    <Border Grid.Row="2" Grid.Column="0" BorderThickness="1,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0"
+                               Foreground="DarkBlue" FontSize="32" FontWeight="Bold" 
+                               Text="{Binding Temperature1, Converter={StaticResource npr}}"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="2" Grid.Column="1" BorderThickness="0,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1"
+                               Foreground="DarkBlue" FontSize="32" FontWeight="Bold" 
+                               Text="{Binding Temperature2, Converter={StaticResource npr}}"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="2" Grid.Column="2" BorderThickness="0,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="2" Grid.Column="2"
+                               Foreground="DarkBlue" FontSize="32" FontWeight="Bold" 
+                               Text="{Binding Temperature3, Converter={StaticResource npr}}"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="2" Grid.Column="3" BorderThickness="0,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="2" Grid.Column="3"
+                               Foreground="DarkBlue" FontSize="32" FontWeight="Bold" 
+                               Text="{Binding Temperature4, Converter={StaticResource npr}}"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="2" Grid.Column="4" BorderThickness="0,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="2" Grid.Column="4"
+                               Foreground="DarkBlue" FontSize="32" FontWeight="Bold" 
+                               Text="{Binding Temperature5, Converter={StaticResource npr}}"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="2" Grid.Column="5" BorderThickness="0,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="2" Grid.Column="5"
+                               Foreground="DarkBlue" FontSize="32" FontWeight="Bold" 
+                               Text="{Binding Temperature7, Converter={StaticResource npr}}"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="2" Grid.Column="6" BorderThickness="0,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="2" Grid.Column="6"
+                               Foreground="DarkBlue" FontSize="32" FontWeight="Bold" 
+                               Text="{Binding Temperature8, Converter={StaticResource npr}}"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="2" Grid.Column="7" BorderThickness="0,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="2" Grid.Column="7"
+                               Foreground="DarkBlue" FontSize="32" FontWeight="Bold" 
+                               Text="{Binding Temperature9, Converter={StaticResource npr}}"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Border Grid.Row="2" Grid.Column="8" BorderThickness="0,0,1,1" BorderBrush="Gray"/>
+                    <TextBlock Grid.Row="2" Grid.Column="8"
+                               Foreground="DarkBlue" FontSize="32" FontWeight="Bold" 
+                               Text="{Binding Temperature10, Converter={StaticResource npr}}"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Grid>
+
+                <!-- 放置外径波形显示控件 -->
+                <TextBlock Grid.Row="4" Grid.ColumnSpan="2" Text="外径值" FontSize="26"
+                           Foreground="DarkGreen" FontWeight="Bold" Margin="0,10"
+                           VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                <hwCtrls:CombinedChart x:Name="odChart" Grid.Row="4" Grid.ColumnSpan="2"
+                                       Margin="0,33,0,0" YTitle="外径值"/>
+            </Grid>
+        </Grid>
+
+        <Grid x:Name="subContentGrid" Grid.Row="1" Panel.ZIndex="100" Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="1.2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="1.2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Row="1" Grid.ColumnSpan="7" Background="#C0000080"/>
+
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="7" Margin="20,0,0,0"
+                       Text="押出机温度:" FontSize="48" FontWeight="Bold"
+                       VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
+
+            <!-- 一段温度 -->
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="一段温度:"
+                       FontSize="40" FontWeight="Bold" Foreground="GreenYellow"
+                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="1" Grid.Column="2" Foreground="Gold" 
+                       Margin="20,0,0,0" FontSize="60" FontWeight="Bold" 
+                       Text="{Binding Temperature1, Converter={StaticResource npr}}"
+                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+            <!-- 二段温度 -->
+            <TextBlock Grid.Row="1" Grid.Column="4" Text="二段温度:"
+                       FontSize="40" FontWeight="Bold" Foreground="GreenYellow"
+                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="1" Grid.Column="5" Foreground="Gold" 
+                       Margin="20,0,0,0" FontSize="60" FontWeight="Bold" 
+                       Text="{Binding Temperature2, Converter={StaticResource npr}}"
+                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+            <Border Grid.Row="2" Grid.ColumnSpan="7" Background="#C0101010"/>
+
+            <!-- 三段温度 -->
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="三段温度:"
+                       FontSize="40" FontWeight="Bold" Foreground="GreenYellow"
+                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="2" Grid.Column="2" Foreground="Azure" 
+                       Margin="20,0,0,0" FontSize="60" FontWeight="Bold" 
+                       Text="{Binding Temperature3, Converter={StaticResource npr}}"
+                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+            <!-- 四段温度 -->
+            <TextBlock Grid.Row="2" Grid.Column="4" Text="四段温度:"
+                       FontSize="40" FontWeight="Bold" Foreground="GreenYellow"
+                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="2" Grid.Column="5" Foreground="Azure" 
+                       Margin="20,0,0,0" FontSize="60" FontWeight="Bold" 
+                       Text="{Binding Temperature4, Converter={StaticResource npr}}"
+                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+            <Border Grid.Row="3" Grid.ColumnSpan="7" Background="#C0000080"/>
+
+            <!-- 五段温度 -->
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="五段温度:"
+                       FontSize="40" FontWeight="Bold" Foreground="GreenYellow"
+                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="3" Grid.Column="2" Foreground="Gold" 
+                       Margin="20,0,0,0" FontSize="60" FontWeight="Bold" 
+                       Text="{Binding Temperature5, Converter={StaticResource npr}}"
+                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+            <!-- 颈部温度 -->
+            <TextBlock Grid.Row="3" Grid.Column="4" Text="颈部温度:"
+                       FontSize="40" FontWeight="Bold" Foreground="GreenYellow"
+                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="3" Grid.Column="5" Foreground="Gold"
+                       Margin="20,0,0,0" FontSize="60" FontWeight="Bold" 
+                       Text="{Binding Temperature7, Converter={StaticResource npr}}"
+                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+            <Border Grid.Row="4" Grid.ColumnSpan="7" Background="#C0101010"/>
+
+            <!-- 机头温度 -->
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="机头温度:"
+                       FontSize="40" FontWeight="Bold" Foreground="GreenYellow"
+                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="4" Grid.Column="2" Foreground="Azure"
+                       Margin="20,0,0,0" FontSize="60" FontWeight="Bold" 
+                       Text="{Binding Temperature8, Converter={StaticResource npr}}"
+                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+            <!-- 眼模温度 -->
+            <TextBlock Grid.Row="4" Grid.Column="4" Text="眼模温度:"
+                       FontSize="40" FontWeight="Bold" Foreground="GreenYellow"
+                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="4" Grid.Column="5" Foreground="Azure" 
+                       Margin="20,0,0,0" FontSize="60" FontWeight="Bold" 
+                       Text="{Binding Temperature9, Converter={StaticResource npr}}"
+                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
+
+            <Border Grid.Row="5" Grid.ColumnSpan="7" Background="#C0000080"/>
+
+            <!-- 水槽温度 -->
+            <TextBlock Grid.Row="5" Grid.Column="1" Text="水槽温度:"
+                       FontSize="40" FontWeight="Bold" Foreground="GreenYellow"
+                       VerticalAlignment="Center" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="5" Grid.Column="2" Foreground="Gold" 
+                       Margin="20,0,0,0" FontSize="60" FontWeight="Bold" 
+                       Text="{Binding Temperature10, Converter={StaticResource npr}}"
+                       VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        </Grid>
+
+    </Grid>
+</device:BaseMachine>

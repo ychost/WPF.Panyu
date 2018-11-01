@@ -1,0 +1,187 @@
+﻿<UserControl x:Class="HuaWeiCtls.CaptionButtons"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d">
+    <UserControl.Resources>
+
+        <SolidColorBrush x:Key="ReduceButton.MouseOver.Color" Color="{Binding Path=ReduceButtonMouseOverColor, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+        <SolidColorBrush x:Key="ReduceButton.MousePressed.Color" Color="{Binding Path=ReduceButtonMousePressedColor, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+        <SolidColorBrush x:Key="MaximizeButton.MouseOver.Color" Color="{Binding Path=MaximizeButtonMouseOverColor, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+        <SolidColorBrush x:Key="MaximizeButton.MousePressed.Color" Color="{Binding Path=MaximizeButtonMousePressedColor, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+        <SolidColorBrush x:Key="CloseButton.MouseOver.Color" Color="{Binding Path=CloseButtonMouseOverColor, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+        <SolidColorBrush x:Key="CloseButton.MousePressed.Color" Color="{Binding Path=CloseButtonMousePressedColor, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+
+        <ControlTemplate x:Key="ChromeButtonControlTemplate" TargetType="{x:Type ButtonBase}">
+            <Border x:Name="Chrome" BorderBrush="{TemplateBinding BorderBrush}" Padding="12,5"
+                    Margin="{Binding MarginButton, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+			        Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" 
+				    Content="{TemplateBinding Content}"
+				    ContentStringFormat="{TemplateBinding ContentStringFormat}" 
+				    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+				    RecognizesAccessKey="True" 
+				    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+				    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Border>
+        </ControlTemplate>
+
+        <DataTemplate x:Key="MaximizeButtonControlTemplate">
+            <TextBlock x:Name="StateText" TextWrapping="Wrap" Text="1" FontFamily="Webdings"               
+                       Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                       FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Normal">
+                    <Setter TargetName="StateText" Property="Text" Value="1"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Maximized">
+                    <Setter TargetName="StateText" Property="Text" Value="2"/>
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+
+        <DataTemplate x:Key="DefaultButtonControlTemplate">
+            <TextBlock TextWrapping="Wrap" Text="{TemplateBinding Content}" FontFamily="Webdings"
+                       Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                       FontSize="{Binding FontSize, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"/>
+        </DataTemplate>
+
+        <Style x:Key="SetChromeButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Setter Property="Template" Value="{StaticResource ChromeButtonControlTemplate}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ShowSettingButton, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Value="true">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource ReduceButton.MouseOver.Color}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource ReduceButton.MousePressed.Color}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style x:Key="ReduceChromeButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="ToolTip" Value="最小化"/>
+            <Setter Property="Template" Value="{StaticResource ChromeButtonControlTemplate}"/>
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Type, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Value="Full">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Type, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Value="ReduceClose">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource ReduceButton.MouseOver.Color}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource ReduceButton.MousePressed.Color}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="MaximizeChromeButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="ToolTip" Value="最大化"/>
+            <Setter Property="Template" Value="{StaticResource ChromeButtonControlTemplate}"/>
+            <Setter Property="Visibility" Value="Collapsed"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Type, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" Value="Full">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Maximized">
+                    <Setter Property="ToolTip" Value="最小化"/>
+                </DataTrigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource MaximizeButton.MouseOver.Color}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource MaximizeButton.MousePressed.Color}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="CloseChromeButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="ToolTip" Value="关闭"/>
+            <Setter Property="Template" Value="{StaticResource ChromeButtonControlTemplate}"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource CloseButton.MouseOver.Color}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource CloseButton.MousePressed.Color}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Storyboard x:Key="Storyboard0">
+            <ColorAnimation From="{Binding Path=ReduceButtonMouseOverColor, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" FillBehavior="Stop"
+                            To="Transparent" Duration="00:00:00.30000" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="appSetButton"/>
+        </Storyboard>
+        <Storyboard x:Key="Storyboard1">
+            <ColorAnimation From="{Binding Path=ReduceButtonMouseOverColor, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" FillBehavior="Stop"
+                            To="Transparent" Duration="00:00:00.30000" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="minimizeButton"/>
+        </Storyboard>
+        <Storyboard x:Key="Storyboard2">
+            <ColorAnimation From="{Binding Path=MaximizeButtonMouseOverColor, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" FillBehavior="Stop"
+                            To="Transparent" Duration="00:00:00.30000" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="restoreButton"/>
+        </Storyboard>
+        <Storyboard x:Key="Storyboard3" >
+            <ColorAnimation From="{Binding Path=CloseButtonMouseOverColor, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" FillBehavior="Stop"
+                            To="Transparent" Duration="00:00:00.30000" Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)" Storyboard.TargetName="closeButton"/>
+        </Storyboard>
+
+        <Style x:Key="CaptionButtonStyle" TargetType="{x:Type StackPanel}">
+            <Setter Property="Margin" Value="0"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding WindowState, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Value="Maximized">
+                    <Setter Property="Margin" Value="0,5,8,0"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+    </UserControl.Resources>
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="Mouse.MouseLeave" SourceName="appSetButton" >
+            <BeginStoryboard Storyboard="{StaticResource Storyboard0}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="Mouse.MouseLeave" SourceName="minimizeButton" >
+            <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="Mouse.MouseLeave" SourceName="restoreButton">
+            <BeginStoryboard Storyboard="{StaticResource Storyboard2}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="Mouse.MouseLeave" SourceName="closeButton">
+            <BeginStoryboard Storyboard="{StaticResource Storyboard3}"/>
+        </EventTrigger>
+    </UserControl.Triggers>
+
+    <StackPanel Orientation="Horizontal" Style="{StaticResource CaptionButtonStyle}">
+        <Button x:Name="appSetButton" x:FieldModifier="public"	Style="{StaticResource SetChromeButtonStyle}" ContentTemplate="{DynamicResource DefaultButtonControlTemplate}" Content="6"/>
+        <Button x:Name="minimizeButton"	Style="{StaticResource ReduceChromeButtonStyle}" Click="MinimizeButtonClick" ContentTemplate="{DynamicResource DefaultButtonControlTemplate}" Content="0"/>
+        <Button x:Name="restoreButton" Style="{StaticResource MaximizeChromeButtonStyle}" Click="RestoreButtonClick" ContentTemplate="{DynamicResource MaximizeButtonControlTemplate}"/>
+        <Button x:Name="closeButton" Style="{StaticResource CloseChromeButtonStyle}" Click="CloseButtonClick" ContentTemplate="{DynamicResource DefaultButtonControlTemplate}" Content="r"/>
+    </StackPanel>
+</UserControl>

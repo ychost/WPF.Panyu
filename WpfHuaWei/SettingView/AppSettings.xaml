@@ -1,0 +1,82 @@
+﻿<Window x:Class="WpfHuaWei.SettingView.AppSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:hwCtls="clr-namespace:HuaWeiCtls;assembly=HuaWeiCtls"
+        xmlns:local="clr-namespace:WpfHuaWei.SettingView"
+        xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell"
+        Title="设置中心" Height="500" Width="750" ShowInTaskbar="False" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome  CaptionHeight="30" CornerRadius="0"
+                             GlassFrameThickness="6" ResizeBorderThickness="0"/>
+    </shell:WindowChrome.WindowChrome>
+    <Grid x:Name="rootGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Rectangle Grid.ColumnSpan="2" Fill="#F07396C8"/>
+        <Rectangle Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="2">
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint=".5,0" EndPoint=".5,1">
+                    <GradientStop Color="#E89FCAF3" Offset="0"/>
+                    <GradientStop Color="#E8FFFFFF" Offset="1"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        
+        <Rectangle Grid.ColumnSpan="2" Height="1" Margin="0,0,0,1" 
+                   VerticalAlignment="Bottom" Fill="#6791BF"/>
+        <Rectangle Grid.ColumnSpan="2" Height="1" VerticalAlignment="Bottom" Fill="#ABD1F5"/>
+
+        <Border Grid.Row="2" Grid.ColumnSpan="2" Panel.ZIndex="1" 
+                BorderBrush="Gray" BorderThickness="0,1,0,0"/>
+        
+        <StackPanel Grid.ColumnSpan="2" Orientation="Horizontal" 
+                    Margin="8,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left">
+            <Image Width="20" Height="20" Source="..\Images\logo_small.png"
+                   VerticalAlignment="Center"/>
+            <TextBlock Margin="4,0,0,0" Text="设置中心" FontSize="15"
+                       FontFamily="微软雅黑" VerticalAlignment="Center"/>
+        </StackPanel>
+        <!-- Captions Buttons to control the window borderless-->
+        <hwCtls:CaptionButtons x:Name="captionButtons" Grid.ColumnSpan="2" Foreground="White"
+                               Margin="0,1,1,0" FontSize="14" Type="Close"
+                               HorizontalAlignment="Right" VerticalAlignment="Top"
+                               shell:WindowChrome.IsHitTestVisibleInChrome="True"/>
+        <Border Grid.RowSpan="3" Grid.ColumnSpan="2" BorderBrush="#80000000" 
+                BorderThickness="1" CornerRadius="1"/>
+        <Border Grid.RowSpan="3" Grid.ColumnSpan="2" Margin="1" BorderBrush="#40FFFFFF" 
+                BorderThickness="1" CornerRadius="2"/>
+        
+        <TabControl Grid.Row="1" Grid.ColumnSpan="2" BorderThickness="1,0,0,0"
+                    Margin="1,-1" TabStripPlacement="Left" Background="#40FFFFFF">
+            <TabItem Foreground="#BCD7EE" FontSize="12" Width="146" Height="42"
+                     Margin="0,9,0,-9" Style="{DynamicResource ImageTabItemStyle}">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="24" Height="24" Margin="5,0" 
+                               Source="..\Images\general_settings.png"
+                               VerticalAlignment="Center"/>
+                        <TextBlock Margin="10,0,0,0" Text="综合设置" FontSize="16"
+                                   Foreground="Black" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <local:GeneralSettings x:Name="generalSettings"/>
+            </TabItem>
+        </TabControl>
+
+        <hwCtls:WenlButton x:Name="tbOK" Content="确认" Margin="0,0,110,0" Grid.Row="3"
+                           Grid.ColumnSpan="2" Width="80" Height="24" Pattern="Success" 
+                           VerticalAlignment="Center" HorizontalAlignment="Right" Click="tbOK_Click"/>
+        <hwCtls:WenlButton x:Name="tbCancel" Content="取消" Margin="0,0,20,0" Grid.Row="3"
+                           Grid.ColumnSpan="2" Width="80" Height="24" Pattern="Success"
+                           VerticalAlignment="Center" HorizontalAlignment="Right"
+                           Click="tbCancel_Click"/>
+    </Grid>
+</Window>

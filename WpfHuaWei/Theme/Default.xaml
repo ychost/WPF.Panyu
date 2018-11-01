@@ -1,0 +1,6 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush x:Key="GeneralBackground" Color="#FDFDFD"/>
+    <ImageBrush x:Key="GeneralBackground2" TileMode="Tile" ImageSource="..\Images\default_bg.jpg"
+                ViewportUnits="Absolute" Viewport="0,0,40,40"/>
+</ResourceDictionary>

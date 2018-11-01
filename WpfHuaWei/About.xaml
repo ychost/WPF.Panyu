@@ -1,0 +1,70 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:hwCtls="clr-namespace:HuaWeiCtls;assembly=HuaWeiCtls"
+        xmlns:shell="clr-namespace:Microsoft.Windows.Shell;assembly=Microsoft.Windows.Shell"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" x:Class="WpfHuaWei.About"
+        Title="关于软件" Height="380" Width="300" ShowInTaskbar="False"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome  CaptionHeight="30" CornerRadius="0"
+                             GlassFrameThickness="6" ResizeBorderThickness="0"/>
+    </shell:WindowChrome.WindowChrome>
+    <Grid x:Name="rootGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Rectangle Fill="#F07396C8"/>
+        <Rectangle Grid.Row="1" Grid.RowSpan="2">
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint=".5,0" EndPoint=".5,1">
+                    <GradientStop Color="#E89FCAF3" Offset="0"/>
+                    <GradientStop Color="#E8FFFFFF" Offset="1"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <Rectangle Height="1" Margin="0,0,0,1" 
+                   VerticalAlignment="Bottom" Fill="#6791BF"/>
+        <Rectangle Height="1" VerticalAlignment="Bottom" Fill="#ABD1F5"/>
+
+        <StackPanel Orientation="Horizontal" Margin="8,0,0,0" 
+                    VerticalAlignment="Center" HorizontalAlignment="Left">
+            <Image Width="20" Height="20" Source="Images\logo_small.png"
+                   VerticalAlignment="Center"/>
+            <TextBlock Margin="4,0,0,0" Text="关于软件" FontSize="15"
+                       FontFamily="微软雅黑" VerticalAlignment="Center"/>
+        </StackPanel>
+        <!-- Captions Buttons to control the window borderless-->
+        <hwCtls:CaptionButtons x:Name="captionButtons" Grid.ColumnSpan="2"
+                               Foreground="White" Margin="0,1,1,0"
+                               FontSize="14" HorizontalAlignment="Right" 
+                               Type="Close" VerticalAlignment="Top" 
+                               shell:WindowChrome.IsHitTestVisibleInChrome="True"/>
+        
+        <Border Grid.RowSpan="2" BorderBrush="#80000000" 
+                BorderThickness="1" CornerRadius="1"/>
+        <Border Grid.RowSpan="2" Margin="1" BorderBrush="#40FFFFFF" 
+                BorderThickness="1" CornerRadius="2"/>
+        
+        <StackPanel Grid.Row="1" Orientation="Vertical"
+                    VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Image Source="Images\dev_co_logo.png" Height="188" Width="189"
+                   Stretch="UniformToFill"/>
+            <StackPanel Orientation="Vertical" Margin="0,20,0,0"
+                        TextElement.FontSize="18"
+                        TextElement.FontFamily="微软雅黑"
+                        TextElement.Foreground="DarkGreen">
+                <TextBlock Text="番禺电缆电子看板软件"/>
+                <TextBlock Text="版       本：1.0.0.0"/>
+                <TextBlock Text="版权所有：电子科技大学"/>
+                <TextBlock Text="Powered by UESTC." FontSize="12"
+                           Margin="0,10,-20,0" Foreground="Black"
+                           HorizontalAlignment="Right"/>
+            </StackPanel>
+            
+        </StackPanel>
+    </Grid>
+</Window>

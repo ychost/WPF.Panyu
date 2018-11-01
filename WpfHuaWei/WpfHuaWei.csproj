@@ -1,0 +1,312 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{078A7600-B82B-4C12-A52D-192E67AB9D68}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WpfHuaWei</RootNamespace>
+    <AssemblyName>电子看板</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>PanyuLogo128.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>WpfHuaWei.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DataDisplay">
+      <HintPath>..\libs\DataDisplay.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.FOXITREADERLib">
+      <HintPath>..\libs\Interop.FOXITREADERLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Windows.Shell">
+      <HintPath>Library\Microsoft.Windows.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\libs\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="YCsharp">
+      <HintPath>..\..\..\IntelliManuPro\YCsharp\bin\Debug\YCsharp.exe</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DataService\DataDetail.cs" />
+    <Compile Include="DataService\DataMain.cs" />
+    <Compile Include="DataService\ProductionProcessPdfService.cs" />
+    <Compile Include="DataService\StateObject.cs" />
+    <Compile Include="DeviceView\BaseMachine.cs" />
+    <Compile Include="DataService\MachineProductionInfo.cs" />
+    <Compile Include="DataService\OnlineDataCenter.cs" />
+    <Compile Include="DeviceView\ColorNameToBrushConverter.cs" />
+    <Compile Include="DeviceView\NonpositiveReplacer.cs" />
+    <Compile Include="DeviceView\PositiveDoubleFormatter.cs" />
+    <Compile Include="DeviceView\DoubleValueFormatter.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Utils\ApplicationStateManager.cs" />
+    <Compile Include="Utils\CommonUtil.cs" />
+    <Compile Include="Utils\FileNameValidationRule.cs" />
+    <Compile Include="Utils\LoadingWindow.xaml.cs">
+      <DependentUpon>LoadingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SettingView\AppSettings.xaml.cs">
+      <DependentUpon>AppSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DeviceView\CurrentBianZhi.xaml.cs">
+      <DependentUpon>CurrentBianZhi.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DeviceView\CurrentDuiJiao.xaml.cs">
+      <DependentUpon>CurrentDuiJiao.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DeviceView\CurrentJiHutao.xaml.cs">
+      <DependentUpon>CurrentJiHutao.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DeviceView\CurrentJiJueYuan.xaml.cs">
+      <DependentUpon>CurrentJiJueYuan.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SettingView\GeneralSettings.xaml.cs">
+      <DependentUpon>GeneralSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\CableTypeUtil.cs" />
+    <Compile Include="Utils\CollectionViewGroupToTextConverter.cs" />
+    <Compile Include="Utils\DateTimeToStringConverter.cs" />
+    <Compile Include="Utils\FirstFloorDevicesMonitor.cs" />
+    <Compile Include="Utils\ParamVisualStateConverter.cs" />
+    <Compile Include="Utils\ParamValueAdjustConverter.cs" />
+    <Page Include="About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Utils\LoadingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SettingView\AppSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DeviceView\CurrentBianZhi.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DeviceView\CurrentDuiJiao.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DeviceView\CurrentJiHutao.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DeviceView\CurrentJiJueYuan.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="SettingView\GeneralSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Theme\ApplicationStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Theme\Default.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Theme\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.manifest">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AppResorces\AppResources.csproj">
+      <Project>{0d8a25f3-515c-48d1-82e8-ab47a6ee61b0}</Project>
+      <Name>AppResources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HuaWeiBase\HuaWeiBase.csproj">
+      <Project>{e51745c4-7a4b-4167-b96f-e7d3088aa7e6}</Project>
+      <Name>HuaWeiBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HuaWeiCtls\HuaWeiCtls.csproj">
+      <Project>{a4a19e9b-d6cd-495d-b9e7-eed38a0aa37b}</Project>
+      <Name>HuaWeiCtls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HuaWeiDAL\HuaWeiDAL.csproj">
+      <Project>{0e4e7f32-3a09-467b-bf31-d084e7846e36}</Project>
+      <Name>HuaWeiDAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HuaWeiModel\HuaWeiModel.csproj">
+      <Project>{295304c9-b372-44c8-96ab-06177441f691}</Project>
+      <Name>HuaWeiModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HuaWeiUtils\HuaWeiUtils.csproj">
+      <Project>{c55516e5-3609-4422-b33d-924354467b2b}</Project>
+      <Name>HuaWeiUtils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\popupbg1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\default_bg.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\firstpage.png" />
+    <Resource Include="Images\gotopage.png" />
+    <Resource Include="Images\nextpage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\general_settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="PanyuLogo128.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\logo_small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\dev_co_logo.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
