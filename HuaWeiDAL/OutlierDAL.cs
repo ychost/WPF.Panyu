@@ -6,6 +6,7 @@ using System.Text;
 
 namespace HuaWeiDAL
 {
+    [Obsolete("已经不需要保存错误数据了")]
     public class OutlierDAL
     {
         public static bool Add(Outlier outlier)
@@ -15,7 +16,8 @@ namespace HuaWeiDAL
                 "ParamName,Value,Upper,Lower,CollectedTime) values('{0}','{1}'," +
                 "{2},{3},{4},'{5}')", outlier.MachineName, outlier.ParamName,
                 outlier.Value, outlier.Upper, outlier.Lower, outlier.CollectedTime);
-            return DBHelper.ExecuteNonQuery(sql.ToString(), null);
+//            return DBHelper.ExecuteNonQuery(sql.ToString(), null);
+            return false;
         }
     }
 }

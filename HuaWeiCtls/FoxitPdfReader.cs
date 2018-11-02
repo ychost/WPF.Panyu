@@ -15,5 +15,13 @@ namespace HuaWeiCtls
         {
             InitializeComponent();
         }
+
+        private void axFoxitPDFSDK1_BeforeDraw(object sender, AxFoxitPDFSDKStdLib._DFoxitPDFSDKEvents_BeforeDrawEvent e) {
+
+        }
+
+        private void FoxitPdfReader_Load(object sender, EventArgs e) {
+
+        }
     }
 }

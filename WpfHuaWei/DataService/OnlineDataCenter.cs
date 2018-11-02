@@ -495,11 +495,7 @@ namespace WpfHuaWei.DataService {
                 fileStream.Flush();
                 fileStream.Close();
 
-                if (machineProductionInfo != null)
-                    machineProductionInfo.PdfService.NotifyGetPdfFromServer(sd.filename);
             } catch {
-                if (machineProductionInfo != null)
-                    machineProductionInfo.PdfService.NotifyCaugthErrorFromServer(sd.filename);
             } finally {
                 if (fileStream != null) { fileStream.Close(); }
             }
@@ -553,7 +549,7 @@ namespace WpfHuaWei.DataService {
         /// </summary>
         public static void StartUseMq() {
             activeMq.Start();
-            activeMq.ListenTopic("mes_online", "98k", null, Show);
+            activeMq.ListenTopic("mes_online", Show);
         }
 
         /// <summary>
